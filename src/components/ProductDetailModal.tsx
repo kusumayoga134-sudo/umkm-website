@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Product } from '@/types';
 import { formatRupiah } from '@/lib/utils';
 import { useCart } from '@/lib/cart-context';
-import { X, Star, ShoppingCart, Plus, Minus, ShieldCheck } from 'lucide-react';
+import { X, Star, ShoppingCart, Plus, Minus, ShieldCheck, MessageCircle, Sparkles } from 'lucide-react';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -18,6 +18,10 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
   if (!product) return null;
 
   const isOutOfStock = product.stock <= 0;
+  const whatsappNumber = process.env.NEXT_PUBLIC_UMKM_WHATSAPP || '6281234567890';
+  const waDirectUrl = `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+    `Halo Karsa Rasa Nusantara, saya ingin bertanya dan memesan produk: ${product.name} sejumlah ${quantity} pcs.`
+  )}`;
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
@@ -140,19 +144,31 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
                   </div>
                 </div>
 
-                {/* Add to cart button */}
-                <button
-                  onClick={handleAddToCart}
-                  disabled={isOutOfStock}
-                  className={`w-full py-2.5 sm:py-3.5 px-4 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition duration-200 ${
-                    isOutOfStock
-                      ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                      : 'bg-brand-600 hover:bg-brand-700 text-white shadow-md active:scale-98'
-                  }`}
-                >
-                  <ShoppingCart className="w-4 h-4" />
-                  <span>{isOutOfStock ? 'Stok Telah Habis' : 'Masukkan ke Keranjang'}</span>
-                </button>
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={isOutOfStock}
+                    className={`flex-1 py-2.5 sm:py-3.5 px-4 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition duration-200 ${
+                      isOutOfStock
+                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        : 'bg-gradient-to-r from-brand-700 to-brand-600 hover:from-brand-800 hover:to-brand-700 text-white shadow-md active:scale-98'
+                    }`}
+                  >
+                    <ShoppingCart className="w-4 h-4" />
+                    <span>{isOutOfStock ? 'Stok Habis' : 'Masukkan Keranjang'}</span>
+                  </button>
+
+                  <a
+                    href={waDirectUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 py-2.5 sm:py-3.5 px-4 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition active:scale-98"
+                  >
+                    <MessageCircle className="w-4 h-4 text-emerald-600" />
+                    <span>Pesan via WA</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

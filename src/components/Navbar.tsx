@@ -27,9 +27,15 @@ export default function Navbar() {
                   Nusantara
                 </span>
               </div>
-              <p className="text-[10px] sm:text-[11px] text-gray-700 font-semibold tracking-wider uppercase mt-1 hidden xs:block">
-                Artisanal Kopi & Camilan UMKM
-              </p>
+              <div className="flex items-center gap-2 mt-1 hidden xs:flex">
+                <p className="text-[10px] sm:text-[11px] text-gray-600 font-semibold tracking-wider uppercase">
+                  Artisanal Kopi & Camilan UMKM
+                </p>
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-50 text-[9px] font-bold text-emerald-700 border border-emerald-200">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Siap Kirim
+                </span>
+              </div>
             </div>
           </Link>
 

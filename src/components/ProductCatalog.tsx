@@ -194,18 +194,33 @@ export default function ProductCatalog({ initialProducts, categories }: ProductC
               onClick={() => {
                 if (!isCatDragging) setSelectedCategory('all');
               }}
-              className={`px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap transition shrink-0 ${
+              className={`px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold whitespace-nowrap transition shrink-0 flex items-center gap-1.5 ${
                 selectedCategory === 'all'
                   ? 'bg-gradient-to-r from-brand-700 to-brand-600 text-white shadow-xs'
                   : 'bg-brand-50/60 text-gray-700 border border-brand-200/70 hover:bg-brand-100 hover:text-brand-800'
               }`}
             >
-              Semua ({initialProducts.length})
+              <span>✨ Semua</span>
+              <span
+                className={`text-[10px] px-1.5 py-0.2 rounded-full font-semibold ${
+                  selectedCategory === 'all' ? 'bg-white/20 text-white' : 'bg-brand-100 text-brand-800'
+                }`}
+              >
+                {initialProducts.length}
+              </span>
             </button>
 
             {categories.map((cat) => {
               const isSelected = selectedCategory === cat.slug;
               const count = cat._count?.products ?? 0;
+              const getCategoryIcon = (slug: string) => {
+                if (slug.includes('kopi')) return '☕';
+                if (slug.includes('camilan')) return '🍌';
+                if (slug.includes('sambal')) return '🌶️';
+                if (slug.includes('hampers')) return '🎁';
+                return '🏷️';
+              };
+
               return (
                 <button
                   key={cat.id}
@@ -218,6 +233,7 @@ export default function ProductCatalog({ initialProducts, categories }: ProductC
                       : 'bg-brand-50/60 text-gray-700 border border-brand-200/70 hover:bg-brand-100 hover:text-brand-800'
                   }`}
                 >
+                  <span>{getCategoryIcon(cat.slug)}</span>
                   <span>{cat.name}</span>
                   <span
                     className={`text-[10px] px-1.5 py-0.2 rounded-full font-semibold ${

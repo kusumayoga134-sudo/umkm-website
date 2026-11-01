@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import AdminNavbar from '@/components/AdminNavbar';
 import { formatRupiah } from '@/lib/utils';
 import { Order } from '@/types';
-import { Search, Phone, MapPin, MessageSquare, Sparkles, X } from 'lucide-react';
+import { Search, Phone, MapPin, MessageSquare, Sparkles, X, Clock, CheckCircle2, Truck, AlertCircle, ShoppingBag } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function AdminOrdersPage() {
@@ -60,6 +60,47 @@ export default function AdminOrdersPage() {
       o.customerPhone.includes(search)
   );
 
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'PENDING':
+        return (
+          <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+            <Clock className="w-3 h-3" /> Menunggu
+          </span>
+        );
+      case 'PROCESSING':
+        return (
+          <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
+            <Clock className="w-3 h-3" /> Sedang Diproses
+          </span>
+        );
+      case 'SHIPPED':
+        return (
+          <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200">
+            <Truck className="w-3 h-3" /> Dalam Pengiriman
+          </span>
+        );
+      case 'COMPLETED':
+        return (
+          <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+            <CheckCircle2 className="w-3 h-3" /> Selesai
+          </span>
+        );
+      case 'CANCELLED':
+        return (
+          <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200">
+            <AlertCircle className="w-3 h-3" /> Dibatalkan
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 border border-gray-200">
+            {status}
+          </span>
+        );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#fdfbf7] flex flex-col">
       <AdminNavbar />
@@ -69,23 +110,23 @@ export default function AdminOrdersPage() {
         <div className="mb-6 bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-brand-200/80 shadow-xs">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-800 text-[10px] font-bold uppercase tracking-wider mb-1.5">
             <Sparkles className="w-3 h-3 text-brand-600" />
-            <span>Manajemen Transaksi</span>
+            <span>Manajemen Transaksi & Logistik</span>
           </div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 font-serif">
             Daftar Pesanan Konsumen
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
-            Kelola detail pesanan, pantau alamat pengiriman, dan perbarui proses logistik pesanan.
+            Kelola detail transaksi, perbarui status pengiriman barang, dan hubungi pelanggan via WhatsApp.
           </p>
         </div>
 
         {/* Filter Bar */}
-        <div className="bg-white p-3 sm:p-4 rounded-2xl border border-brand-200/80 shadow-xs mb-6 flex flex-col md:flex-row gap-3 items-center justify-between">
+        <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-brand-200/80 shadow-xs mb-6 flex flex-col md:flex-row gap-3 items-center justify-between">
           <div className="relative w-full md:w-80">
             <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Cari nomor pesanan, nama, no HP..."
+              placeholder="Cari no pesanan, nama, no HP..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
@@ -98,31 +139,26 @@ export default function AdminOrdersPage() {
           </div>
 
           <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto no-scrollbar pb-0.5 touch-pan-x">
-            {['ALL', 'PENDING', 'PROCESSING', 'SHIPPED', 'COMPLETED', 'CANCELLED'].map(
-              (status) => (
-                <button
-                  key={status}
-                  onClick={() => setStatusFilter(status)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition shrink-0 ${
-                    statusFilter === status
-                      ? 'bg-gradient-to-r from-brand-700 to-brand-600 text-white shadow-xs'
-                      : 'bg-brand-50/60 text-gray-700 border border-brand-200/70 hover:bg-brand-100 hover:text-brand-800'
-                  }`}
-                >
-                  {status === 'ALL'
-                    ? 'Semua'
-                    : status === 'PENDING'
-                    ? 'Menunggu'
-                    : status === 'PROCESSING'
-                    ? 'Diproses'
-                    : status === 'SHIPPED'
-                    ? 'Dikirim'
-                    : status === 'COMPLETED'
-                    ? 'Selesai'
-                    : 'Batal'}
-                </button>
-              )
-            )}
+            {[
+              { id: 'ALL', label: 'Semua Pesanan' },
+              { id: 'PENDING', label: 'Menunggu' },
+              { id: 'PROCESSING', label: 'Diproses' },
+              { id: 'SHIPPED', label: 'Dikirim' },
+              { id: 'COMPLETED', label: 'Selesai' },
+              { id: 'CANCELLED', label: 'Batal' },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setStatusFilter(tab.id)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition shrink-0 ${
+                  statusFilter === tab.id
+                    ? 'bg-gradient-to-r from-brand-700 to-brand-600 text-white shadow-xs'
+                    : 'bg-brand-50/60 text-gray-700 border border-brand-200/70 hover:bg-brand-100 hover:text-brand-800'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -137,123 +173,151 @@ export default function AdminOrdersPage() {
               Tidak ada pesanan ditemukan dengan kriteria tersebut.
             </div>
           ) : (
-            filteredOrders.map((order) => (
-              <div
-                key={order.id}
-                className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-brand-200/80 shadow-xs flex flex-col lg:flex-row justify-between gap-5 sm:gap-6"
-              >
-                {/* Left: Customer & Address */}
-                <div className="space-y-2.5 sm:space-y-3 flex-1">
-                  <div className="flex items-center gap-2.5">
-                    <span className="font-mono font-bold text-xs sm:text-sm text-brand-700 bg-brand-50 px-2.5 py-1 rounded-lg border border-brand-200/60">
-                      {order.orderNumber}
-                    </span>
-                    <span className="text-[11px] sm:text-xs text-gray-400">
-                      {new Date(order.createdAt).toLocaleDateString('id-ID', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </span>
-                  </div>
+            filteredOrders.map((order) => {
+              const waMessage = `Halo Kak ${order.customerName}, kami dari pengelola UMKM Karsa Rasa ingin mengonfirmasi pesanan #${order.orderNumber} (Status: ${order.status}) dengan total ${formatRupiah(order.totalAmount)}. Terima kasih telah mendukung produk UMKM kami!`;
 
-                  <div>
-                    <h3 className="text-sm sm:text-base font-bold text-gray-900">{order.customerName}</h3>
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600 mt-1">
-                      <span className="flex items-center gap-1 font-medium text-emerald-700">
-                        <Phone className="w-3.5 h-3.5 text-emerald-600" />
-                        <a
-                          href={`https://wa.me/${order.customerPhone.replace(/[^0-9]/g, '')}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="hover:underline"
-                        >
-                          {order.customerPhone}
-                        </a>
+              return (
+                <div
+                  key={order.id}
+                  className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-brand-200/80 shadow-xs flex flex-col lg:flex-row justify-between gap-5 sm:gap-6 hover:shadow-md transition"
+                >
+                  {/* Left: Customer & Address */}
+                  <div className="space-y-2.5 sm:space-y-3 flex-1">
+                    <div className="flex items-center gap-2.5">
+                      <span className="font-mono font-bold text-xs sm:text-sm text-brand-700 bg-brand-50 px-2.5 py-1 rounded-lg border border-brand-200/60">
+                        {order.orderNumber}
                       </span>
-                      <span>Metode: <strong className="text-gray-800">{order.paymentMethod}</strong></span>
+                      {getStatusBadge(order.status)}
+                      <span className="text-[11px] sm:text-xs text-gray-400">
+                        {new Date(order.createdAt).toLocaleDateString('id-ID', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </span>
                     </div>
-                  </div>
 
-                  <div className="text-xs text-gray-600 flex items-start gap-1.5 bg-gray-50 p-2.5 sm:p-3 rounded-xl border border-gray-100">
-                    <MapPin className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
                     <div>
-                      <p className="leading-relaxed">{order.customerAddress}</p>
-                      {order.deliveryNotes && (
-                        <p className="text-gray-400 italic mt-0.5">
-                          Catatan: {order.deliveryNotes}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Middle: Items List */}
-                <div className="w-full lg:w-72 bg-brand-50/40 p-3.5 rounded-xl sm:rounded-2xl border border-brand-100 space-y-2">
-                  <h4 className="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                    Daftar Produk
-                  </h4>
-                  <div className="divide-y divide-brand-100 max-h-36 overflow-y-auto pr-1 text-xs">
-                    {order.items?.map((it) => (
-                      <div key={it.id} className="py-1.5 flex justify-between">
-                        <span className="text-gray-800 line-clamp-1 mr-2">
-                          {it.quantity}x {it.productName}
+                      <h3 className="text-sm sm:text-base font-bold text-gray-900">{order.customerName}</h3>
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600 mt-1">
+                        <span className="flex items-center gap-1 font-medium text-emerald-700">
+                          <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                          <a
+                            href={`https://wa.me/${order.customerPhone.replace(/[^0-9]/g, '')}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="hover:underline"
+                          >
+                            {order.customerPhone}
+                          </a>
                         </span>
-                        <span className="font-bold text-gray-900 shrink-0">
-                          {formatRupiah(it.subtotal)}
+                        <span>
+                          Pembayaran: <strong className="text-gray-800">{order.paymentMethod}</strong>
                         </span>
                       </div>
-                    ))}
-                  </div>
-                  <div className="pt-2 border-t border-brand-200/60 flex justify-between text-xs font-bold">
-                    <span>Total Pembayaran</span>
-                    <span className="text-brand-700 font-extrabold">{formatRupiah(order.totalAmount)}</span>
-                  </div>
-                </div>
+                    </div>
 
-                {/* Right: Status Action Control */}
-                <div className="flex flex-row lg:flex-col justify-between items-center lg:items-end gap-3 min-w-[170px] pt-2 lg:pt-0 border-t lg:border-t-0 border-gray-100">
-                  <div className="text-left lg:text-right">
-                    <div className="text-[10px] sm:text-[11px] text-gray-400 mb-1">Status Pesanan:</div>
-                    <select
-                      value={order.status}
-                      onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
-                      className={`text-xs font-bold px-3 py-1.5 rounded-xl border focus:outline-none ${
-                        order.status === 'COMPLETED'
-                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                          : order.status === 'PROCESSING'
-                          ? 'bg-blue-50 text-blue-800 border-blue-200'
-                          : order.status === 'SHIPPED'
-                          ? 'bg-purple-50 text-purple-800 border-purple-200'
-                          : order.status === 'CANCELLED'
-                          ? 'bg-rose-50 text-rose-800 border-rose-200'
-                          : 'bg-amber-50 text-amber-800 border-amber-200'
-                      }`}
+                    <div className="text-xs text-gray-600 flex items-start gap-1.5 bg-gray-50 p-2.5 sm:p-3 rounded-xl border border-gray-100">
+                      <MapPin className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="leading-relaxed">{order.customerAddress}</p>
+                        {order.deliveryNotes && (
+                          <p className="text-gray-400 italic mt-0.5">
+                            Catatan: {order.deliveryNotes}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Middle: Items List */}
+                  <div className="w-full lg:w-72 bg-brand-50/40 p-3.5 rounded-xl sm:rounded-2xl border border-brand-100 space-y-2">
+                    <h4 className="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1">
+                      <ShoppingBag className="w-3.5 h-3.5 text-brand-600" />
+                      <span>Rincian Produk ({order.items?.length || 0})</span>
+                    </h4>
+                    <div className="divide-y divide-brand-100 max-h-36 overflow-y-auto pr-1 text-xs">
+                      {order.items?.map((it) => (
+                        <div key={it.id} className="py-1.5 flex justify-between">
+                          <span className="text-gray-800 line-clamp-1 mr-2">
+                            {it.quantity}x {it.productName}
+                          </span>
+                          <span className="font-bold text-gray-900 shrink-0">
+                            {formatRupiah(it.subtotal)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="pt-2 border-t border-brand-200/60 flex justify-between text-xs font-bold">
+                      <span>Total Transaksi</span>
+                      <span className="text-brand-700 font-extrabold">{formatRupiah(order.totalAmount)}</span>
+                    </div>
+                  </div>
+
+                  {/* Right: Quick Action Controls */}
+                  <div className="flex flex-col justify-between items-start lg:items-end gap-3 min-w-[190px] pt-3 lg:pt-0 border-t lg:border-t-0 border-gray-100">
+                    <div className="w-full text-left lg:text-right space-y-1.5">
+                      <div className="text-[10px] sm:text-[11px] text-gray-400 font-semibold uppercase tracking-wider">
+                        Ubah Alur Status:
+                      </div>
+                      
+                      {/* One-click fast progression buttons */}
+                      <div className="flex flex-wrap lg:justify-end gap-1">
+                        {order.status === 'PENDING' && (
+                          <button
+                            onClick={() => handleUpdateStatus(order.id, 'PROCESSING')}
+                            className="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[11px] font-bold transition shadow-2xs"
+                          >
+                            Proses Pesanan
+                          </button>
+                        )}
+                        {order.status === 'PROCESSING' && (
+                          <button
+                            onClick={() => handleUpdateStatus(order.id, 'SHIPPED')}
+                            className="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-[11px] font-bold transition shadow-2xs"
+                          >
+                            Kirim Paket
+                          </button>
+                        )}
+                        {order.status === 'SHIPPED' && (
+                          <button
+                            onClick={() => handleUpdateStatus(order.id, 'COMPLETED')}
+                            className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-bold transition shadow-2xs"
+                          >
+                            Tandai Selesai
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Dropdown for manual override */}
+                      <select
+                        value={order.status}
+                        onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
+                        className="w-full text-xs font-bold px-3 py-1.5 rounded-xl border border-brand-200 bg-white text-gray-800 focus:outline-none focus:ring-1 focus:ring-brand-500 shadow-2xs"
+                      >
+                        <option value="PENDING">PENDING (Menunggu)</option>
+                        <option value="PROCESSING">PROCESSING (Diproses)</option>
+                        <option value="SHIPPED">SHIPPED (Dikirim)</option>
+                        <option value="COMPLETED">COMPLETED (Selesai)</option>
+                        <option value="CANCELLED">CANCELLED (Batal)</option>
+                      </select>
+                    </div>
+
+                    <a
+                      href={`https://wa.me/${order.customerPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(waMessage)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition active:scale-98"
                     >
-                      <option value="PENDING">PENDING (Menunggu)</option>
-                      <option value="PROCESSING">PROCESSING (Diproses)</option>
-                      <option value="SHIPPED">SHIPPED (Dikirim)</option>
-                      <option value="COMPLETED">COMPLETED (Selesai)</option>
-                      <option value="CANCELLED">CANCELLED (Batal)</option>
-                    </select>
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>Chat Pembeli di WA</span>
+                    </a>
                   </div>
-
-                  <a
-                    href={`https://wa.me/${order.customerPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                      `Halo Kak ${order.customerName}, kami dari UMKM Karsa Rasa ingin mengonfirmasi pesanan #${order.orderNumber} dengan total ${formatRupiah(order.totalAmount)}.`
-                    )}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition shrink-0"
-                  >
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    <span>Hubungi WA</span>
-                  </a>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </main>

@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
 }
 
 html {
@@ -13,10 +15,14 @@ html {
 }
 
 body {
-  color: #1f2937;
+  color: #27211e;
   background-color: #fdfbf7;
   font-family: var(--font-sans);
   overflow-x: hidden;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(242, 219, 197, 0.25) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(220, 159, 114, 0.15) 0px, transparent 50%);
+  background-attachment: fixed;
 }
 
 /* Custom scrollbars */
@@ -25,11 +31,11 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1ede6;
+  background: #f5efe6;
 }
 ::-webkit-scrollbar-thumb {
   background: #d0804e;
-  border-radius: 4px;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #b86238;
@@ -46,7 +52,71 @@ body {
 
 /* Glassmorphism panel */
 .glass-panel {
-  background: rgba(253, 251, 247, 0.92);
+  background: rgba(253, 251, 247, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(220, 159, 114, 0.25);
+}
+
+/* Soft gold & terracotta ambient glow */
+.ambient-glow {
+  box-shadow: 0 20px 45px -12px rgba(184, 98, 56, 0.2);
+}
+
+.ambient-glow-emerald {
+  box-shadow: 0 20px 45px -12px rgba(45, 122, 91, 0.2);
+}
+
+/* Card hover lift effect */
+.card-hover-lift {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -8px rgba(100, 51, 35, 0.12), 0 4px 12px -2px rgba(100, 51, 35, 0.06);
+}
+
+/* Float animation for decorative pills */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 4s ease-in-out 2s infinite;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.animate-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 3s infinite;
 }
