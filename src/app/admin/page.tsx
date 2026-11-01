@@ -76,7 +76,7 @@ export default function AdminDashboardPage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 w-full flex-1">
         {/* Header Banner with Online Status Indicator */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8 bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-brand-200/80 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8 bg-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-brand-200/80 shadow-xs ambient-glow">
           <div>
             <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-bold uppercase tracking-wider mb-1.5 border border-emerald-200/60">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />

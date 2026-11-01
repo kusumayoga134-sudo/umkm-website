@@ -107,7 +107,7 @@ export default function AdminOrdersPage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 w-full flex-1">
         {/* Header Banner */}
-        <div className="mb-6 bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-brand-200/80 shadow-xs">
+        <div className="mb-6 bg-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-brand-200/80 shadow-xs ambient-glow">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-800 text-[10px] font-bold uppercase tracking-wider mb-1.5">
             <Sparkles className="w-3 h-3 text-brand-600" />
             <span>Manajemen Transaksi & Logistik</span>
