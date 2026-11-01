@@ -27,7 +27,9 @@ export default function CartDrawer() {
   const handleSystemOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !phone || !address) {
-      toast.error('Mohon lengkapi nama, nomor telepon/WA, dan alamat!');
+      toast.error('Mohon lengkapi nama, nomor telepon/WA, dan alamat!', {
+        id: 'order-validation',
+      });
       return;
     }
 
@@ -51,12 +53,18 @@ export default function CartDrawer() {
       if (data.success) {
         setOrderSuccess(data.data);
         clearCart();
-        toast.success('Pesanan Anda berhasil dibuat!');
+        toast.success('Pesanan Anda berhasil dibuat!', {
+          id: 'order-success',
+        });
       } else {
-        toast.error(data.error || 'Gagal memproses pesanan.');
+        toast.error(data.error || 'Gagal memproses pesanan.', {
+          id: 'order-error',
+        });
       }
     } catch (err) {
-      toast.error('Terjadi kesalahan jaringan.');
+      toast.error('Terjadi kesalahan jaringan.', {
+        id: 'order-network',
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -64,7 +72,9 @@ export default function CartDrawer() {
 
   const handleWhatsAppCheckout = () => {
     if (!name || !phone || !address) {
-      toast.error('Isi terlebih dahulu nama, nomor HP, dan alamat pengiriman!');
+      toast.error('Isi terlebih dahulu nama, nomor HP, dan alamat pengiriman!', {
+        id: 'wa-validation',
+      });
       return;
     }
 

@@ -41,7 +41,7 @@ export default function AdminProductsPage() {
         if (dataCat.data.length > 0) setCategoryId(dataCat.data[0].id);
       }
     } catch (e) {
-      toast.error('Gagal memuat produk');
+      toast.error('Gagal memuat produk', { id: 'admin-load-prod' });
     } finally {
       setLoading(false);
     }
@@ -54,7 +54,7 @@ export default function AdminProductsPage() {
   const handleAddProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !price || !categoryId) {
-      toast.error('Lengkapi nama produk, harga, dan kategori');
+      toast.error('Lengkapi nama produk, harga, dan kategori', { id: 'admin-prod-val' });
       return;
     }
 
@@ -79,7 +79,7 @@ export default function AdminProductsPage() {
 
       const data = await res.json();
       if (data.success) {
-        toast.success('Produk baru berhasil ditambahkan!');
+        toast.success('Produk baru berhasil ditambahkan!', { id: 'admin-prod-success' });
         setShowAddModal(false);
         // Reset form
         setName('');
@@ -89,10 +89,10 @@ export default function AdminProductsPage() {
         setImageUrl('');
         fetchData();
       } else {
-        toast.error(data.error || 'Gagal menambahkan produk');
+        toast.error(data.error || 'Gagal menambahkan produk', { id: 'admin-prod-err' });
       }
     } catch (e) {
-      toast.error('Terjadi kesalahan jaringan');
+      toast.error('Terjadi kesalahan jaringan', { id: 'admin-prod-net' });
     } finally {
       setIsSubmitting(false);
     }
@@ -105,13 +105,13 @@ export default function AdminProductsPage() {
       const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
-        toast.success('Produk berhasil dihapus');
+        toast.success('Produk berhasil dihapus', { id: 'admin-del-success' });
         setProducts((prev) => prev.filter((p) => p.id !== id));
       } else {
-        toast.error(data.error || 'Gagal menghapus');
+        toast.error(data.error || 'Gagal menghapus', { id: 'admin-del-err' });
       }
     } catch (e) {
-      toast.error('Gagal menghapus produk');
+      toast.error('Gagal menghapus produk', { id: 'admin-del-net' });
     }
   };
 
@@ -120,7 +120,7 @@ export default function AdminProductsPage() {
     if (input === null) return;
     const newStock = parseInt(input);
     if (isNaN(newStock) || newStock < 0) {
-      toast.error('Stok tidak valid');
+      toast.error('Stok tidak valid', { id: 'admin-stock-val' });
       return;
     }
 
@@ -132,13 +132,13 @@ export default function AdminProductsPage() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success('Stok berhasil diperbarui');
+        toast.success('Stok berhasil diperbarui', { id: 'admin-stock-success' });
         setProducts((prev) =>
           prev.map((p) => (p.id === id ? { ...p, stock: newStock } : p))
         );
       }
     } catch (e) {
-      toast.error('Gagal update stok');
+      toast.error('Gagal update stok', { id: 'admin-stock-err' });
     }
   };
 

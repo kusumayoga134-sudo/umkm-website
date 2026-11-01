@@ -15,7 +15,7 @@ export default function ContactSection() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !subject || !message) {
-      toast.error('Mohon lengkapi semua bidang yang bertanda bintang!');
+      toast.error('Mohon lengkapi semua bidang yang bertanda bintang!', { id: 'contact-val' });
       return;
     }
 
@@ -29,17 +29,17 @@ export default function ContactSection() {
 
       const data = await res.json();
       if (data.success) {
-        toast.success('Pesan Anda berhasil dikirim! Kami akan segera merespon.');
+        toast.success('Pesan Anda berhasil dikirim! Kami akan segera merespon.', { id: 'contact-success' });
         setName('');
         setEmail('');
         setPhone('');
         setSubject('');
         setMessage('');
       } else {
-        toast.error(data.error || 'Gagal mengirim pesan.');
+        toast.error(data.error || 'Gagal mengirim pesan.', { id: 'contact-err' });
       }
     } catch (err) {
-      toast.error('Terjadi kesalahan koneksi.');
+      toast.error('Terjadi kesalahan koneksi.', { id: 'contact-conn' });
     } finally {
       setIsSending(false);
     }

@@ -19,7 +19,7 @@ export default function AdminMessagesPage() {
         setMessages(data.data);
       }
     } catch (e) {
-      toast.error('Gagal memuat pesan');
+      toast.error('Gagal memuat pesan', { id: 'admin-msg-load' });
     } finally {
       setLoading(false);
     }

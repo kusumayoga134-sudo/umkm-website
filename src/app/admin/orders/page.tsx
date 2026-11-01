@@ -22,7 +22,7 @@ export default function AdminOrdersPage() {
         setOrders(data.data);
       }
     } catch (e) {
-      toast.error('Gagal memuat daftar pesanan');
+      toast.error('Gagal memuat daftar pesanan', { id: 'admin-orders-load' });
     } finally {
       setLoading(false);
     }
@@ -41,15 +41,15 @@ export default function AdminOrdersPage() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success(`Status pesanan diubah ke ${newStatus}`);
+        toast.success(`Status pesanan diubah ke ${newStatus}`, { id: `admin-order-status-${orderId}` });
         setOrders((prev) =>
           prev.map((o) => (o.id === orderId ? { ...o, status: newStatus as any } : o))
         );
       } else {
-        toast.error(data.error || 'Gagal mengubah status');
+        toast.error(data.error || 'Gagal mengubah status', { id: `admin-order-status-err` });
       }
     } catch (e) {
-      toast.error('Terjadi kesalahan jaringan');
+      toast.error('Terjadi kesalahan jaringan', { id: `admin-order-status-net` });
     }
   };
 

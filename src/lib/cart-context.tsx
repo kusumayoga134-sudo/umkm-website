@@ -56,43 +56,50 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const toggleCart = () => setIsOpen((prev) => !prev);
 
   const addToCart = (product: Product, quantity: number = 1) => {
-    setItems((prevItems) => {
-      const existing = prevItems.find((item) => item.productId === product.id);
-      if (existing) {
-        const newQty = existing.quantity + quantity;
-        if (newQty > product.stock) {
-          toast.error(`Stok tersisa hanya ${product.stock} pcs`);
-          return prevItems;
-        }
-        toast.success(`Jumlah ${product.name} ditambah di keranjang`);
-        return prevItems.map((item) =>
+    const existing = items.find((item) => item.productId === product.id);
+    const currentQty = existing ? existing.quantity : 0;
+    const newQty = currentQty + quantity;
+
+    if (newQty > product.stock) {
+      toast.error(`Stok tersisa hanya ${product.stock} pcs`, {
+        id: `cart-stock-${product.id}`,
+      });
+      return;
+    }
+
+    if (existing) {
+      setItems((prevItems) =>
+        prevItems.map((item) =>
           item.productId === product.id ? { ...item, quantity: newQty } : item
-        );
-      } else {
-        if (quantity > product.stock) {
-          toast.error(`Stok tersisa hanya ${product.stock} pcs`);
-          return prevItems;
-        }
-        toast.success(`${product.name} berhasil dimasukkan ke keranjang`);
-        return [
-          ...prevItems,
-          {
-            id: `${product.id}-${Date.now()}`,
-            productId: product.id,
-            name: product.name,
-            price: product.price,
-            quantity: quantity,
-            imageUrl: product.imageUrl,
-            weight: product.weight,
-          },
-        ];
-      }
-    });
+        )
+      );
+      toast.success(`Jumlah ${product.name} ditambah di keranjang`, {
+        id: `cart-toast-${product.id}`,
+      });
+    } else {
+      setItems((prevItems) => [
+        ...prevItems,
+        {
+          id: `${product.id}-${Date.now()}`,
+          productId: product.id,
+          name: product.name,
+          price: product.price,
+          quantity: quantity,
+          imageUrl: product.imageUrl,
+          weight: product.weight,
+        },
+      ]);
+      toast.success(`${product.name} berhasil dimasukkan ke keranjang`, {
+        id: `cart-toast-${product.id}`,
+      });
+    }
   };
 
   const removeFromCart = (productId: string) => {
     setItems((prev) => prev.filter((item) => item.productId !== productId));
-    toast.success('Produk dihapus dari keranjang');
+    toast.success('Produk dihapus dari keranjang', {
+      id: `cart-remove-${productId}`,
+    });
   };
 
   const updateQuantity = (productId: string, quantity: number) => {

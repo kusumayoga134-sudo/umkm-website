@@ -21,7 +21,7 @@ export default function TestimonialsSection({ initialTestimonials }: Testimonial
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !comment) {
-      toast.error('Nama dan ulasan wajib diisi!');
+      toast.error('Nama dan ulasan wajib diisi!', { id: 'testimonial-val' });
       return;
     }
 
@@ -41,16 +41,16 @@ export default function TestimonialsSection({ initialTestimonials }: Testimonial
       const data = await res.json();
       if (data.success) {
         setTestimonials([data.data, ...testimonials]);
-        toast.success('Terima kasih! Ulasan Anda berhasil ditampilkan.');
+        toast.success('Terima kasih! Ulasan Anda berhasil ditampilkan.', { id: 'testimonial-success' });
         setShowAddModal(false);
         setName('');
         setCity('');
         setComment('');
       } else {
-        toast.error(data.error || 'Gagal mengirim ulasan');
+        toast.error(data.error || 'Gagal mengirim ulasan', { id: 'testimonial-err' });
       }
     } catch (e) {
-      toast.error('Terjadi kesalahan koneksi.');
+      toast.error('Terjadi kesalahan koneksi.', { id: 'testimonial-conn' });
     } finally {
       setIsSubmitting(false);
     }
