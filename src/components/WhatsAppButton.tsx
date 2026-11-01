@@ -1,9 +1,17 @@
 'use client';
 
 import React from 'react';
+import { usePathname } from 'next/navigation';
 import { MessageSquare } from 'lucide-react';
 
 export default function WhatsAppButton() {
+  const pathname = usePathname();
+
+  // Do not render floating public chat button inside admin dashboard
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
   const phone = process.env.NEXT_PUBLIC_UMKM_WHATSAPP || '6281234567890';
   const message = 'Halo Admin Karsa Rasa Nusantara, saya tertarik dengan produk UMKM Anda dan ingin bertanya.';
 
