@@ -7,17 +7,22 @@
   --font-serif: "Playfair Display", Georgia, serif;
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   color: #1f2937;
   background-color: #fdfbf7;
   font-family: var(--font-sans);
-  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 /* Custom scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #f1ede6;
@@ -30,10 +35,18 @@ body {
   background: #b86238;
 }
 
-/* Glassmorphism helpers */
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Glassmorphism panel */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(253, 251, 247, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(220, 159, 114, 0.2);
 }

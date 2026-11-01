@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ShoppingBag, Coffee, Menu, X, ShieldCheck } from 'lucide-react';
+import { ShoppingBag, Coffee, Menu, X, ShieldCheck, Home, Package, BookOpen, Star, Mail } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 
 export default function Navbar() {
@@ -10,64 +10,69 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full glass-panel border-b border-brand-200 shadow-sm transition-all">
+    <header className="sticky top-0 z-40 w-full glass-panel border-b border-brand-200/80 shadow-xs transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo & Brand */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-800 to-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-700/20 group-hover:scale-105 transition-transform">
-              <Coffee className="w-6 h-6 text-brand-100" />
+        <div className="flex items-center justify-between h-16 sm:h-20">
+          {/* Logo & Brand Name */}
+          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-brand-800 to-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-700/20 group-hover:scale-105 transition-transform shrink-0">
+              <Coffee className="w-5 h-5 sm:w-6 sm:h-6 text-brand-100" />
             </div>
-            <div>
-              <span className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-1.5 font-serif">
-                Karsa Rasa <span className="text-brand-600">Nusantara</span>
-              </span>
-              <p className="text-[11px] text-gray-700 font-medium tracking-wide uppercase">
+            <div className="flex flex-col justify-center">
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-lg sm:text-2xl font-bold tracking-tight text-gray-900 font-serif leading-none">
+                  Karsa Rasa
+                </span>
+                <span className="text-xs sm:text-lg font-bold text-brand-600 font-serif leading-none">
+                  Nusantara
+                </span>
+              </div>
+              <p className="text-[10px] sm:text-[11px] text-gray-700 font-semibold tracking-wider uppercase mt-1 hidden xs:block">
                 Artisanal Kopi & Camilan UMKM
               </p>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
-            <Link href="/#beranda" className="hover:text-brand-600 transition-colors">
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-7 text-sm font-semibold text-gray-700">
+            <Link href="/#beranda" className="hover:text-brand-600 transition-colors py-1">
               Beranda
             </Link>
-            <Link href="/#katalog" className="hover:text-brand-600 transition-colors">
+            <Link href="/#katalog" className="hover:text-brand-600 transition-colors py-1">
               Katalog Produk
             </Link>
-            <Link href="/#cerita" className="hover:text-brand-600 transition-colors">
+            <Link href="/#cerita" className="hover:text-brand-600 transition-colors py-1">
               Kisah Kami
             </Link>
-            <Link href="/#testimoni" className="hover:text-brand-600 transition-colors">
+            <Link href="/#testimoni" className="hover:text-brand-600 transition-colors py-1">
               Testimoni
             </Link>
-            <Link href="/#kontak" className="hover:text-brand-600 transition-colors">
+            <Link href="/#kontak" className="hover:text-brand-600 transition-colors py-1">
               Kontak
             </Link>
           </nav>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3">
-            {/* Admin Dashboard shortcut */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Admin Dashboard shortcut (desktop) */}
             <Link
               href="/admin"
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs text-brand-800 bg-brand-100/70 hover:bg-brand-200 px-3 py-1.5 rounded-full font-medium transition"
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs text-brand-900 bg-brand-100/80 hover:bg-brand-200/90 border border-brand-200/60 px-3.5 py-2 rounded-xl font-semibold transition shadow-xs"
               title="Dashboard Pengelola UMKM"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-brand-700" />
-              <span>Admin UMKM</span>
+              <ShieldCheck className="w-4 h-4 text-brand-700" />
+              <span>Admin Toko</span>
             </Link>
 
-            {/* Cart Trigger */}
+            {/* Cart Trigger Button */}
             <button
               onClick={toggleCart}
               aria-label="Buka Keranjang Belanja"
-              className="relative p-2.5 rounded-full bg-white border border-brand-200 text-gray-800 hover:text-brand-600 hover:border-brand-400 hover:shadow-md transition duration-200"
+              className="relative p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white border border-brand-200/90 text-gray-800 hover:text-brand-600 hover:border-brand-400 hover:shadow-md transition duration-200 shadow-xs"
             >
               <ShoppingBag className="w-5 h-5" />
               {totalItems > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-brand-600 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm animate-pulse">
+                <span className="absolute -top-1.5 -right-1.5 bg-brand-600 text-white text-[10px] sm:text-[11px] font-bold min-w-5 h-5 px-1 rounded-full flex items-center justify-center shadow-md animate-pulse">
                   {totalItems}
                 </span>
               )}
@@ -76,7 +81,7 @@ export default function Navbar() {
             {/* Mobile Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 md:hidden text-gray-700 hover:text-brand-600 focus:outline-none"
+              className="p-2 md:hidden text-gray-700 hover:text-brand-600 rounded-xl hover:bg-brand-100/50 transition focus:outline-none"
               aria-label="Menu Navigasi"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -87,49 +92,50 @@ export default function Navbar() {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-brand-200 bg-white/95 px-4 pt-3 pb-6 space-y-3">
+        <div className="md:hidden border-t border-brand-200/80 bg-white/95 backdrop-blur-md px-4 pt-3 pb-6 space-y-1 shadow-lg animate-in slide-in-from-top-2 duration-200">
           <Link
             href="/#beranda"
             onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-gray-800 hover:text-brand-600"
+            className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm font-semibold text-gray-800 hover:text-brand-700 hover:bg-brand-50 transition"
           >
-            Beranda
+            <Home className="w-4 h-4 text-brand-600" /> Beranda
           </Link>
           <Link
             href="/#katalog"
             onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-gray-800 hover:text-brand-600"
+            className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm font-semibold text-gray-800 hover:text-brand-700 hover:bg-brand-50 transition"
           >
-            Katalog Produk
+            <Package className="w-4 h-4 text-brand-600" /> Katalog Produk
           </Link>
           <Link
             href="/#cerita"
             onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-gray-800 hover:text-brand-600"
+            className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm font-semibold text-gray-800 hover:text-brand-700 hover:bg-brand-50 transition"
           >
-            Kisah Kami
+            <BookOpen className="w-4 h-4 text-brand-600" /> Kisah Kami
           </Link>
           <Link
             href="/#testimoni"
             onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-gray-800 hover:text-brand-600"
+            className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm font-semibold text-gray-800 hover:text-brand-700 hover:bg-brand-50 transition"
           >
-            Testimoni Pelanggan
+            <Star className="w-4 h-4 text-brand-600" /> Testimoni Pelanggan
           </Link>
           <Link
             href="/#kontak"
             onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-gray-800 hover:text-brand-600"
+            className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-sm font-semibold text-gray-800 hover:text-brand-700 hover:bg-brand-50 transition"
           >
-            Hubungi Kami
+            <Mail className="w-4 h-4 text-brand-600" /> Hubungi Kami
           </Link>
-          <div className="pt-2 border-t border-gray-100">
+
+          <div className="pt-3 mt-2 border-t border-brand-100">
             <Link
               href="/admin"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 py-2 text-sm font-semibold text-brand-700"
+              className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-brand-700 hover:bg-brand-800 shadow-sm transition"
             >
-              <ShieldCheck className="w-4 h-4" /> Masuk Panel Admin
+              <ShieldCheck className="w-4 h-4" /> Masuk Panel Admin Toko
             </Link>
           </div>
         </div>
