@@ -97,7 +97,7 @@ export default function AdminOrdersPage() {
             )}
           </div>
 
-          <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto no-scrollbar pb-0.5">
+          <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto no-scrollbar pb-0.5 touch-pan-x">
             {['ALL', 'PENDING', 'PROCESSING', 'SHIPPED', 'COMPLETED', 'CANCELLED'].map(
               (status) => (
                 <button
@@ -105,8 +105,8 @@ export default function AdminOrdersPage() {
                   onClick={() => setStatusFilter(status)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition shrink-0 ${
                     statusFilter === status
-                      ? 'bg-brand-600 text-white shadow-xs'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-gradient-to-r from-brand-700 to-brand-600 text-white shadow-xs'
+                      : 'bg-brand-50/60 text-gray-700 border border-brand-200/70 hover:bg-brand-100 hover:text-brand-800'
                   }`}
                 >
                   {status === 'ALL'
