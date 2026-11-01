@@ -1,11 +1,100 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import AdminNavbar from '@/components/AdminNavbar';
 import { formatRupiah } from '@/lib/utils';
 import { Order } from '@/types';
-import { Search, Phone, MapPin, MessageSquare, Sparkles, X, Clock, CheckCircle2, Truck, AlertCircle, ShoppingBag } from 'lucide-react';
+import { Search, Phone, MapPin, MessageSquare, Sparkles, X, Clock, CheckCircle2, Truck, AlertCircle, ShoppingBag, ChevronDown, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+interface OrderStatusDropdownProps {
+  status: string;
+  onStatusChange: (newStatus: string) => void;
+}
+
+function OrderStatusDropdown({ status, onStatusChange }: OrderStatusDropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const options = [
+    { value: 'PENDING', label: 'PENDING (Menunggu)', dot: 'bg-amber-500' },
+    { value: 'PROCESSING', label: 'PROCESSING (Diproses)', dot: 'bg-blue-500' },
+    { value: 'SHIPPED', label: 'SHIPPED (Dikirim)', dot: 'bg-purple-500' },
+    { value: 'COMPLETED', label: 'COMPLETED (Selesai)', dot: 'bg-emerald-500' },
+    { value: 'CANCELLED', label: 'CANCELLED (Batal)', dot: 'bg-rose-500' },
+  ];
+
+  const currentOption = options.find((opt) => opt.value === status) || options[0];
+
+  return (
+    <div className="relative w-full" ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className={`w-full flex items-center justify-between gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition border shadow-2xs ${
+          isOpen
+            ? 'bg-brand-50 text-brand-900 border-brand-400 ring-2 ring-brand-200'
+            : 'bg-white text-gray-800 border-brand-200 hover:border-brand-300 hover:bg-brand-50/50'
+        }`}
+        aria-expanded={isOpen}
+      >
+        <div className="flex items-center gap-2 truncate">
+          <span className={`w-2 h-2 rounded-full shrink-0 ${currentOption.dot}`} />
+          <span className="truncate">{currentOption.label}</span>
+        </div>
+        <ChevronDown
+          className={`w-3.5 h-3.5 text-brand-700 shrink-0 transition-transform duration-200 ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+        />
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 bottom-full mb-1.5 sm:bottom-auto sm:top-full sm:mt-1.5 w-full min-w-[210px] bg-white/98 backdrop-blur-md border border-brand-200/90 shadow-xl rounded-2xl p-1.5 z-40 animate-in fade-in zoom-in-95 duration-150">
+          <div className="px-2.5 py-1 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-brand-100 mb-1">
+            Ubah Status Pesanan
+          </div>
+          <div className="space-y-0.5">
+            {options.map((opt) => {
+              const isSelected = status === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => {
+                    onStatusChange(opt.value);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-semibold transition text-left ${
+                    isSelected
+                      ? 'bg-brand-100/90 text-brand-900 font-bold'
+                      : 'text-gray-700 hover:bg-brand-50 hover:text-brand-800'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 truncate">
+                    <span className={`w-2 h-2 rounded-full shrink-0 ${opt.dot}`} />
+                    <span className="truncate">{opt.label}</span>
+                  </div>
+                  {isSelected && <Check className="w-3.5 h-3.5 text-brand-700 shrink-0" />}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -291,18 +380,11 @@ export default function AdminOrdersPage() {
                         )}
                       </div>
 
-                      {/* Dropdown for manual override */}
-                      <select
-                        value={order.status}
-                        onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
-                        className="w-full text-xs font-bold px-3 py-1.5 rounded-xl border border-brand-200 bg-white text-gray-800 focus:outline-none focus:ring-1 focus:ring-brand-500 shadow-2xs"
-                      >
-                        <option value="PENDING">PENDING (Menunggu)</option>
-                        <option value="PROCESSING">PROCESSING (Diproses)</option>
-                        <option value="SHIPPED">SHIPPED (Dikirim)</option>
-                        <option value="COMPLETED">COMPLETED (Selesai)</option>
-                        <option value="CANCELLED">CANCELLED (Batal)</option>
-                      </select>
+                      {/* Custom Elegant Status Popover Dropdown */}
+                      <OrderStatusDropdown
+                        status={order.status}
+                        onStatusChange={(newStatus) => handleUpdateStatus(order.id, newStatus)}
+                      />
                     </div>
 
                     <a
